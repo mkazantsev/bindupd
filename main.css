@@ -1,0 +1,15 @@
+table.list, table.list td, table.list th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+table.list th {
+	text-align: left;
+	font-weight: normal;
+	background-color: silver;
+}
+table.list td, table.list th {
+	padding: 5px;
+}
+div.error {
+	color: red;
+}
