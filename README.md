@@ -1,9 +1,7 @@
 BindUpd
 =======
 
-## A few words about history
-
-BindUpd is a project I've made in a summer of 2009 using a lot of OOP in PHP5.
+BindUpd is a web interface for managing BIND configuration file.
 
 ## Software dependencies
 
