@@ -1,5 +1,3 @@
-HUUUI
-
 <?php
 
 include_once("tbs_class_php5.php");
