@@ -1,15 +1,55 @@
-table.list, table.list td, table.list th {
+body, table, td, th, input {
+	font-family: Arial, sans-serif;
+	font-size: 10pt;
+}
+table, table td, table th {
 	border: 1px solid black;
 	border-collapse: collapse;
+}
+table td, table th {
+	vertical-align: middle;
+	padding: 5px;
 }
 table.list th {
 	text-align: left;
 	font-weight: normal;
 	background-color: silver;
 }
-table.list td, table.list th {
-	padding: 5px;
+table.login {
+	margin-top: 30px;
+}
+table.login input {
+}
+table.reg {
+	margin-top: 20px;
+}
+table.reg input {
+	width: 150px;
+}
+table.reg td.desc {
+	color: silver;
 }
 div.error {
 	color: red;
+}
+div.menu {
+	padding-bottom: 30px;
+}
+div.bottom, div.section {
+	padding-top: 10px;
+}
+div.nav span {
+	color: blue;
+	border-bottom: 1px dashed blue;
+	cursor: pointer;
+}
+div.nav span.active {
+	color: black;
+	border-bottom: none;
+}
+div#editContent {
+	display: none;
+}
+div#addContent {
+	display: none;
 }

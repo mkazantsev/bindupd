@@ -1,0 +1,41 @@
+<form action="?do=ops" method="POST">
+<div class="section">
+<table class="list">
+	<tr>
+		<td>Operation type:</td>
+		<td><select name="op">
+		<option value="[optype.id]">[optype.name;block=option]</option>
+		<option>[onshow.cur_op;ope=html;select]</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td>User:</td>
+		<td><select name="user">
+		<option value="[user.id]">[user.name;block=option]</option>
+		<option>[onshow.cur_user;ope=html;select]</option>
+		</select></td>
+	</tr>
+</table>
+</div>
+<div class="section"><input type="submit" value="Apply filter"></div>
+</form>
+<div class="section" id="viewContent">
+<table class="list">
+	<tr>
+		<th><a href="?do=ops&sort=1">ID</a></th>
+		<th><a href="?do=ops&sort=2">Type</a></th>
+		<th><a href="?do=ops&sort=3">User</a></th>
+		<th><a href="?do=ops&sort=4">Date</a></th>
+		<th><a href="?do=ops&sort=5">Old value</a></th>
+		<th><a href="?do=ops&sort=6">New value</a></th>
+	</tr>
+	<tr>
+		<td>[list.id]</td>
+		<td>[list.type;block=tr]</td>
+		<td>[list.user]</td>
+		<td>[list.date;frm='yyyy-mm-dd hh:nn:ss']</td>
+		<td>[list.oldValue]</td>
+		<td>[list.newValue]</td>
+	</tr>
+</table>
+</div>

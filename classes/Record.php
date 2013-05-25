@@ -81,14 +81,14 @@ class Record {
 
 	public static /* Record */ function Record2(/* string */ $type,
 		/* string */ $data) {
-		$r = new Record("", -1, strToType($type), $data);
+		$r = new Record("", -1, Record::strToType($type), $data);
 		return $r;
 	}
 
 	public static /* Record */ function Record3(/* string */ $name,
 		/* string */ $type,
 		/* string */ $data) {
-		$r = new Record($name, -1, strToType($type), $data);
+		$r = new Record($name, -1, Record::strToType($type), $data);
 		return $r;
 	}
 
@@ -196,7 +196,11 @@ class Record {
 	}
 
 	public /* string */ function getType() {
-		return typeToStr($this->type);
+		return Record::typeToStr($this->type);
+	}
+
+	public /* int */ function getIntType() {
+		return $this->type;
 	}
 
 	public /* string */ function getData() {
@@ -208,20 +212,27 @@ class Record {
 	}
 	
 	public /* void */ function setType(/* string */ $type) {
-		$this->type = strToType($type);
+		$this->type = Record::strToType($type);
 	}
 
 	public /* void */ function setData(/* string */ $data) {
 		$this->data = $data;
 	}
 	
+	public /* int */ function getTTL() {
+		return $this->ttl;
+	}
+
 	public function setTTL(/* string */ $ttl) {
 		$this->ttl = Record::makeTTL($ttl);
 	}
 
 	private static /* long */ function makeTTL(/* string */ $ttl) {
 		/* long */ $longTTL = -1;
-		
+
+		if ($ttl == "")
+			return $longTTL;	
+	
 		if (!is_numeric($ttl))
 			throw new InvalidArgumentException("Illegal TTL value");
 		

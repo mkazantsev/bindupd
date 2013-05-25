@@ -1,0 +1,67 @@
+<script type="text/javascript" src="i/js.js"></script>
+<div class="section nav">
+<span id="view" class="active" onclick="set('view')">View</span>
+<span id="edit" onclick="set('edit')">Edit</span>
+<span id="add" onclick="set('add')">Add</span>
+</div>
+<div class="section" id="viewContent">
+<table class="list">
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>TTL</th>
+		<th>Type</th>
+		<th>Data</th>
+		<th>&nbsp;</th>
+	</tr>
+	<tr>
+		<td>[list.id]</td>
+		<td>[list.name;block=tr]</td>
+		<td>[list.ttl]</td>
+		<td>[list.type]</td>
+		<td>[list.data]</td>
+		<td><a href="?do=records&zone=[onshow.zone]&act=deleterecord&id=[list.id]">Delete</a></a></td>
+	</tr>
+</table>
+</div>
+<div class="section" id="editContent">
+<form action="?do=records&zone=[onshow.zone]&act=editrecord" method="POST">
+<table class="list">
+	<tr>
+		<th>&nbsp;</th>
+		<th>Name</th>
+		<th>TTL</th>
+		<th>Type</th>
+		<th>Data</th>
+		<th>&nbsp;</th>
+	</tr>
+	<tr>
+		<td><input name="is[[list2.id;block=tr]]" type="checkbox" value="1"></td>
+		<td><input name="name[[list2.id]]" type="text" value="[list2.name]"></td>
+		<td><input name="ttl[[list2.id]]" type="text" value="[list2.ttl]"></td>
+		<td><select name="type[[list2.id]]">
+			<option value="[type.id]">[type.name;block=option]</option>
+			<option>[list2.typeID;ope=html;select]</option>
+		</select></td>
+		<td><input name="data[[list2.id]]" type="text" value="[list2.data]"></td>
+		<td><a href="?do=records&zone=[onshow.zone]&act=deleterecord&id=[list.id]">Delete</a></a></td>
+	</tr>
+</table>
+<div class="bottom"><input type="submit" value="Edit records"></div>
+</form>
+</div>
+<div class="section" id="addContent">
+<form action="?do=records&zone=[onshow.zone]&act=addrecord" method="POST">
+<table class="add">
+<tr><td>Name:</td><td><input type="text" name="name"></td></tr>
+<tr><td>TTL:</td><td><input type="text" name="ttl"></td></tr>
+<tr><td>Type:</td><td>
+<select name="type">
+<option value="[type2.id]">[type2.name;block=option]</option>
+</select>
+</td></tr>
+<tr><td>Data:</td><td><input type="text" name="data"></td></tr>
+<tr><td>&nbsp;</td><td><input type="submit" value="Add record"></td></tr>
+</table>
+</form>
+</div>

@@ -98,7 +98,7 @@ class Zone {
 			// Directives
 			if ($line[0] == '$') {
 				try {
-					/* Directive */ $dec = new Directive($line);
+					/* Directive */ $dec = Directive::Directive($line);
 					$this->directives[] = $dec;
 				} catch (InvalidArgumentException $iae) {
 					fclose($fp);
@@ -190,9 +190,17 @@ class Zone {
 		return $this->directives;
 	}
 	
+	public /* Directive */ function getDirective(/* int */ $index) {
+		return $this->directives[$index];
+	}
+	
 	public /* array of Records */ function getRecords() {
 		return $this->records;
 	}	
+
+	public /* Record */ function getRecord(/* int */ $index) {
+		return $this->records[$index];
+	}
 
 	public /* string */ function getName() {
 		return $this->name;
@@ -206,36 +214,29 @@ class Zone {
 		return $this->typeToStr($this->type);
 	}
 
+	public /* int */ function getIntType() {
+		return $this->type;
+	}
+
 	public /* void */ function setName(/* string */ $name) {
 		$this->name = $name;
 	}
 
 	public /* void */ function setFileName(/* string */ $fileName) {
-		$oldFile = $path.$this->fileName;
+		//$oldFile = $path.$this->fileName;
 		$this->fileName = $fileName;
-		$newFile = $path.$this->fileName;
-		/* boolean */ $changed = rename($oldFile, $newFile);
-		if (!$changed)
-			throw new Exception("Rename failed");
+		//$newFile = $path.$this->fileName;
 	}
 
 	public /* void */ function setType(/* string */ $type) {
-		$this->type = strToType($type);
+		$this->type = Zone::strToType($type);
 	}
-
-	public /* Record */ function getRecord(int $index) {
-		return $this->records[$index];
-	}
-	
-	public /* Directive */ function getDirective(int $index) {
-		return $this->directives[$index];
-	}	
 
 	public /* int */ function recordsSize() {
 		return count($this->records);
 	}
 
-	public /* void */ function removeRecord(int $index) {
+	public /* void */ function removeRecord(/* int */ $index) {
 		unset($this->records[$index]);
 	}
 
@@ -243,18 +244,20 @@ class Zone {
 		return count($this->directives);
 	}
 
-	public /* void */ function removeDirective(int $index) {
+	public /* void */ function removeDirective(/* int */ $index) {
 		unset($this->directives[$index]);
 	}
 
 	public /* void */ function save() {
-		$zoneFile = $path.$fileName;
-		$fp = fopen($zoneFile, 'w');
+		$zoneFile = $this->path.$this->fileName;
+		$fp = fopen($zoneFile, 'w+');
+		if (!is_writable($zoneFile))
+			throw new IOException($zoneFile." is unwritable");
 		if (!$fp)
 			throw new IOException("Unable to open ".$zoneFile." for zone saving");
 		$ret = fputs($fp, $this->toFile("  "));
-		if (!$ret)
-			throw new IOException("Unable to save zone in ".$zoneFile);
+		//if (!$ret)
+		//	throw new IOException("Unable to save zone in ".$zoneFile);
 		fclose($fp);
 	}
 

@@ -173,6 +173,7 @@ class Config {
 				$line = $this->readZone($line, $fp)." ";
 			}
 		}
+		fclose($fp);
 	}
 
 	public function __construct(/* string */ $fileName,
@@ -208,25 +209,18 @@ class Config {
 	}
 
 	public /* void */ function save() {
-		$zoneFile = $path.$fileName;
-		$fp = fopen($zoneFile, 'w');
-		if (!$fp)
-			throw new IOException("Unable to open ".$zoneFile." for zone saving");
-		$ret = fputs($fp, $this->toFile("  "));
-		if (!$ret)
-			throw new IOException("Unable to save zone in ".$zoneFile);
-		fclose($fp);
-		
 		/* string */ $res = "";
-		$configFile = $fileName;
-		$fp = fopen($fileName, 'w');
+		$configFile = $this->fileName;
+		if (!is_writable($configFile))
+			throw new IOException("Config file ".$configFile." is unwritable");
+		$fp = fopen($configFile, 'w');
 		if (!$fp)
-			throw new IOException("Unable to open ".$configFile." for config saving");
+			throw new IOException("Unable to open ".$configFile." for config saving ");
 		foreach ($this->zones as $zone) {
+			$zone->save();
 			$ret = fputs($fp, $zone->toConfig(" "));
 			if (!$ret)
 				throw new IOException("Unable to save config in ".$configFile);
-			$zone->save();
 		}
 		fclose($fp);
 	}

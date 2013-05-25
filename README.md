@@ -3,7 +3,7 @@ BindUpd
 
 ## A few words about history
 
-BindUpd is a project I've made in a summer of 2009 using a lot of OOP in PHP5.
+BindUpd is a project I have been developing a long time ago, in a summer of 2009 using a lot of OOP in PHP5.
 
 ## Software dependencies
 
@@ -26,7 +26,7 @@ BindUpd is a project I've made in a summer of 2009 using a lot of OOP in PHP5.
 
 ## Usage
 
-First user with name 'admin' and password 'password' is initially created with all the database tables and records in them.
+First user with name `admin` and password `password` is initially created with all the database tables and records in them.
 
 Any user that can access `index.php` and `register.php` can register himself in the BindUpd system. Newly created account will be initially disabled. Any user with admin privileges can enable user's account using 'Users' section.
 

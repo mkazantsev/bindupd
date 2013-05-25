@@ -13,22 +13,25 @@
 	    exit(0);
 	}
 
-	global $action;
-
 	include_once("tbs/tbs_plugin_html.php");
 	$TBS->PlugIn(TBS_INSTALL,TBS_HTML);
+	
+	global $action, $zone;
 
-	$TBS->LoadTemplate("templates/zonesList.html");
+	$TBS->LoadTemplate("templates/recordsList.html");
 
-	$link = mysql_connect($mysql_host, $mysql_user, $mysql_password)
-		or die("Could not connect: ".mysql_error());
-	mysql_select_db($mysql_db) or die("Could not select database");
-
-	try {
+	try {		
 		$cfg = new Config($configFileName, $path);
+		$zones = $cfg->getZones();
+		$z =& $cfg->getZone($zone);
 
 		// Actions if there are some
 		if (isset($action) && $action && count($action) > 0) {
+		
+			$link = mysql_connect($mysql_host, $mysql_user, $mysql_password)
+				or die("Could not connect: ".mysql_error());
+			mysql_select_db($mysql_db) or die("Could not select database");
+
 
 			global $userid;
 			$optype = array();
@@ -46,75 +49,78 @@
 			}
 			mysql_free_result($result);
 
-			if ($action[0] == "addzone") {
-				// Add zone to config and save it
-				$z = new Zone(Zone::$types[$action[1]], $action[2], $action[3],
-					$path, true);
-				$cfg->addZone($z);
+			if ($action[0] == "addrecord") {
+				// Add record to a zone, then zone to config and save it
+				$r_str = $action[1]." ".$action[2]." ".Record::$types[$action[3]]." ".$action[4];
+				$r = Record::Record($r_str);
+				$z->addRecord($r);
 				$cfg->save();
 
 				// Add new operation record in DB
 				$today = date("Y-m-d H:i:s");
-				$z_str = $z->getType()." ".$z->getName()." ".$z->getFileName();
 				$query = "INSERT INTO Operation (type_id, user_id, date, old_value, new_value)
-					VALUES(".$optype['add'].", ".$userid.", '".$today."', '', '".$z_str."')";
+					VALUES(".$optype['add'].", ".$userid.", '".$today."', '', 'Zone ".$zone.": ".$r_str."')";
 				$result = mysql_query($query) or die('Query failed: ' . mysql_error(). $query);
 			}
-			if ($action[0] == "deletezone") {
-				$z = $cfg->getZone($action[1]);
-				$cfg->removeZone($action[1]);
+			if ($action[0] == "deleterecord") {
+				$r = $z->getRecord($action[1]);
+				$z->removeRecord($action[1]);
 				$cfg->save();
 				
 				// Add new operation record in DB
 				$today = date("Y-m-d H:i:s");
-				$z_str = $z->getType()." ".$z->getName()." ".$z->getFileName();
+				$r_str = "Zone ".$zone.": ".$r->toString(" ");
 				$query = "INSERT INTO Operation (type_id, user_id, date, old_value, new_value)
-					VALUES(".$optype['delete'].", ".$userid.", '".$today."', '".$z_str."', '')";
+					VALUES(".$optype['delete'].", ".$userid.", '".$today."', '".$r_str."', '')";
 				$result = mysql_query($query) or die('Query failed: ' . mysql_error(). $query);
 			}
-			if ($action[0] == "editzone") {
+			if ($action[0] == "editrecord") {
 			foreach ($action[1] as $key => $value) {
-				$z =& $cfg->getZone($key);
-				$z1_str = $z->getType()." ".$z->getName()." ".$z->getFileName();
-				$z->setType(Zone::$types[$action[2][$key]]);
-				$z->setName($action[3][$key]);
-				$z->setFileName($action[4][$key]);
-				$z2_str = $z->getType()." ".$z->getName()." ".$z->getFileName();
-
+				$r =& $z->getRecord($key);
+				$r1_str = "Zone ".$zone.": ".$r->toString(" ");
+				$r->setName($action[2][$key]);
+				$r->setTTL($action[3][$key]);
+				$r->setType(Record::$types[$action[4][$key]]);
+				$r->setData($action[5][$key]);
+				$r2_str = "Zone ".$zone.": ".$r->toString(" ");
+				
 				$cfg->save();
 
 				// Add new operation record in DB
 				$today = date("Y-m-d H:i:s");
 				$query = "INSERT INTO Operation (type_id, user_id, date, old_value, new_value)
-					VALUES(".$optype['delete'].", ".$userid.", '".$today."', '".$z1_str."', '".$z2_str."')";
+					VALUES(".$optype['edit'].", ".$userid.", '".$today."', '".$r1_str."', '".$r2_str."')";
 				$result = mysql_query($query) or die('Query failed: ' . mysql_error(). $query);
 			}
 			}
-		}
 		
-		mysql_close($link);
+			mysql_close($link);
+		}
 
-		$zones = $cfg->getZones();
+		$records = $z->getRecords();
 		$i = 0;
-		$zones_str = array();
-		foreach($zones as $zone) {
-			$zones_str[] = array ('id' => $i,
-				'type' => $zone->getType(),
-				'typeID' => $zone->getIntType(),
-				'name' => $zone->getName(),
-				'filename' => $zone->getFileName()
+		$records_str = array();
+		foreach($records as $record) {
+			$records_str[] = array ('id' => $i,
+				'name' => $record->getName(),
+				'ttl' => $record->getTTL(),
+				'typeID' => $record->getIntType(),
+				'type' => $record->getType(),
+				'data' => $record->getData()
 			);
+			if ($records_str[$i]['ttl'] == -1)
+				$records_str[$i]['ttl'] = "";
 			$i++;
 		}
 		$types = array();
-		foreach (Zone::$types as $key => $value) {
+		foreach (Record::$types as $key => $value) {
 			$types[] = array(
 				'id' => $key,
 				'name' => $value
 			);
 		}
 		$TBS->MergeBlock('type,type2', $types);
-		$TBS->MergeBlock('list,list2', $zones_str);
+		$TBS->MergeBlock('list,list2', $records_str);
 		$TBS->Show();
 	} catch(InvalidArgumentException $iae) {
 		echo $iae->getMessage()."\n";

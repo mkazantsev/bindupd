@@ -1,8 +1,16 @@
 <html>
- <head><title>BindUPD</title>
- <link rel="stylesheet" type="text/css" href="main.css">
+ <head>
+  <title>BINDUpd</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
  </head>
  <body>
- [onshow;script=zonesList.php;subtpl]
+  [onshow;script=[var.enabled;if [val]=1;then 'menu.php'; else ''];subtpl]
+  [onshow;script=[var.zones;if [val]=1;then 'zonesList.php'; else ''];subtpl]
+  [onshow;script=[var.users;if [val]=1;then 'usersList.php'; else ''];subtpl]
+  [onshow;script=[var.recs;if [val]=1;then 'recordsList.php'; else ''];subtpl]
+  [onshow;script=[var.decs;if [val]=1;then 'directivesList.php'; else ''];subtpl]
+  [onshow;script=[var.ops;if [val]=1;then 'operationsList.php'; else ''];subtpl]
+  [onshow;script=[var.enabled;if [val]=0;then 'error.php'; else ''];subtpl]
+  [onshow;script=[var.enabled;if [val]=-1;then 'login.php'; else ''];subtpl]
  </body>
 </html>

@@ -36,11 +36,13 @@ CREATE TABLE `bindupd`.`User` (
 	FOREIGN KEY (`type_id`) REFERENCES `bindupd`.`User_Type`(`id`)
 );
 
+INSERT INTO  `bindupd`.`User` (`name`, `password_hash`, `state_id`, `type_id`) VALUES ('admin', '5f4dcc3b5aa765d61d8327deb882cf99', 1, 2);
+
 CREATE TABLE `bindupd`.`Operation` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`type_id` INT NOT NULL,
 	`user_id` INT NOT NULL,
-	`date` DATE NOT NULL,
+	`date` DATETIME NOT NULL,
 	`old_value` VARCHAR ( 256 ) NOT NULL,
 	`new_value` VARCHAR ( 256 ) NOT NULL,
 	FOREIGN KEY (`type_id`) REFERENCES `bindupd`.`Operation_Type`(`id`),

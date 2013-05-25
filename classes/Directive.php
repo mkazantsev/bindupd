@@ -22,7 +22,7 @@ class Directive {
 	 * 
 	 */
 	private static /* int */ function strToType(/* string */ $type) {
-		return Utils::strToType($types, $type);
+		return Utils::strToType(Directive::$types, $type);
 	}
 
 	/**
@@ -30,12 +30,12 @@ class Directive {
 	 * 
 	 */
 	private static /* string */ function typeToStr(/* int */ $type) {
-		return Utils::typeToStr(types, type);
+		return Utils::typeToStr(Directive::$types, $type);
 	}
 
 	public function __construct(/* string */ $type,
 		/* string */ $data) {
-		$this->type = strToType($type);
+		$this->type = Directive::strToType($type);
 		$this->data = $data;
 	}
 
@@ -51,14 +51,14 @@ class Directive {
 		if ($count < 2)
 			throw new InvalidArgumentException("Invalid directive string");
 		/* string */ $type = $st->nextToken();
-		$this->type = strToType($type);
 		/* string */ $data = "";
 		while ($st->hasMoreTokens()) {
 			$data .= $st->nextToken();
 			if ($st->hasMoreTokens())
 				$data .= "  ";
 		}
-		$this->data = $data;
+		$d = new Directive($type, $data);
+		return $d;
 	}
 
 	/**
@@ -66,12 +66,24 @@ class Directive {
 	 * 
 	 */
 	public /* string */ function toString(/* string */ $tab) {
-		/* string */ $res = typeToStr($this->type).$tab.$this->data;
-		return res;
+		/* string */ $res = Directive::typeToStr($this->type).$tab.$this->data;
+		return $res;
+	}
+
+	public /* string */ function getType() {
+		return Directive::typeToStr($this->type);
+	}
+
+	public /* int */ function getIntType() {
+		return $this->type;
+	}
+
+	public /* string */ function getData() {
+		return $this->data;
 	}
 
 	public /* void */ function setType(/* string */ $type) {
-		$this->type = strToType($type);
+		$this->type = Directive::strToType($type);
 	}
 
 	public /* void */ function setData(/* string */ $data) {

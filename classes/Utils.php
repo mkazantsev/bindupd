@@ -10,13 +10,14 @@ class Utils {
 	 * representation
 	 * 
 	 */
+	 
 	public static /* int */ function strToType(/* map */ $types, /* String */ $type) {
 		/* int */ $res = -1;
 		foreach ($types as $key => $value) {
 			if($value == strtoupper($type))
 				$res = $key;
 		}
-		
+
 		if ($res == -1)
 			throw new InvalidArgumentException($type." is unsupported type");
 			

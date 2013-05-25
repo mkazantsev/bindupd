@@ -1,0 +1,22 @@
+<form name="f1" method="POST" action="?do=users&act=uptypes">
+<table class="list">
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>State</th>
+		<th>Type</th>
+	</tr>
+	<tr>
+		<td>[user.id;block=tr]</td>
+		<td>[user.name]</td>
+		<td><a href="?do=users&act=chable&id=[user.id]">[user.state]</a></td>
+		<td>
+			<select name="type[[user.id]]">
+				<option value="[type.id]">[type.name;block=option]</option>
+				<option>[user.type;ope=html;select]</option>
+			</select>
+		</td>
+	</tr>
+</table>
+<div class="bottom"><input type="submit" value="Update types"></div>
+</form>

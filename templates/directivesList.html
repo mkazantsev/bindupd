@@ -9,31 +9,24 @@
 	<tr>
 		<th>ID</th>
 		<th>Type</th>
-		<th>Name</th>
-		<th>File Name</th>
-		<th>&nbsp;</th>
-		<th>&nbsp;</th>
+		<th>Data</th>
 		<th>&nbsp;</th>
 	</tr>
 	<tr>
 		<td>[list.id]</td>
 		<td>[list.type;block=tr]</td>
-		<td>[list.name]</td>
-		<td>[list.filename]</td>
-		<td><a href="?do=zones&act=deletezone&id=[list.id]">Delete</a></a></td>
-		<td><a href="?do=records&zone=[list.id]">Records</a></td>
-		<td><a href="?do=directives&zone=[list.id]">Directives</a></td>
+		<td>[list.data]</td>
+		<td><a href="?do=directives&zone=[onshow.zone]&act=deletedirective&id=[list.id]">Delete</a></a></td>
 	</tr>
 </table>
 </div>
 <div class="section" id="editContent">
-<form action="?do=zones&act=editzone" method="POST">
+<form action="?do=directives&zone=[onshow.zone]&act=editdirective" method="POST">
 <table class="list">
 	<tr>
 		<th>&nbsp;</th>
 		<th>Type</th>
-		<th>Name</th>
-		<th>File Name</th>
+		<th>Data</th>
 		<th>&nbsp;</th>
 	</tr>
 	<tr>
@@ -42,25 +35,23 @@
 			<option value="[type.id]">[type.name;block=option]</option>
 			<option>[list2.typeID;ope=html;select]</option>
 		</select></td>
-		<td><input name="name[[list2.id]]" type="text" value="[list2.name]"></td>
-		<td><input name="filename[[list2.id]]" type="text" value="[list2.filename]"></td>
-		<td><a href="?do=zones&act=deletezone&id=[list2.id]">Delete</a></a></td>
+		<td><input name="data[[list2.id]]" type="text" value="[list2.data]"></td>
+		<td><a href="?do=directives&zone=[onshow.zone]&act=deletedirective&id=[list.id]">Delete</a></a></td>
 	</tr>
 </table>
-<div class="bottom"><input type="submit" value="Edit zones"></div>
+<div class="bottom"><input type="submit" value="Edit directives"></div>
 </form>
 </div>
 <div class="section" id="addContent">
-<form action="?do=zones&act=addzone" method="POST">
+<form action="?do=directives&zone=[onshow.zone]&act=adddirective" method="POST">
 <table class="add">
 <tr><td>Type:</td><td>
 <select name="type">
 <option value="[type2.id]">[type2.name;block=option]</option>
 </select>
 </td></tr>
-<tr><td>Name:</td><td><input type="text" name="name"></td></tr>
-<tr><td>File Name:</td><td><input type="text" name="filename"></td></tr>
-<tr><td>&nbsp;</td><td><input type="submit" value="Add zone"></td></tr>
+<tr><td>Data:</td><td><input type="text" name="data"></td></tr>
+<tr><td>&nbsp;</td><td><input type="submit" value="Add directive"></td></tr>
 </table>
 </form>
 </div>
